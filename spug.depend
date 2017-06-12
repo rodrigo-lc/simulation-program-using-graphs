@@ -1,0 +1,251 @@
+# depslib dependency file v1.0
+1495635591 source:c:\users\aluno\desktop\spug\include\graph\graph.c
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<limits.h>
+	"graph.h"
+	"vertex.h"
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"../../include/queue/queue.h"
+	"../../include/stack/stack.h"
+
+1495634092 c:\users\aluno\desktop\spug\include\graph\graph.h
+	"vertex.h"
+	"../stack/stack.h"
+
+1495634777 c:\users\aluno\desktop\spug\include\graph\vertex.h
+	"../../include/linkedList/linkedList.h"
+
+1495633344 c:\users\aluno\desktop\spug\include\linkedlist\linkedlist.h
+	"node.h"
+
+1495634683 c:\users\aluno\desktop\spug\include\linkedlist\node.h
+
+1495632286 c:\users\aluno\desktop\spug\include\stack\stack.h
+
+1495634683 c:\users\aluno\desktop\spug\include\queue\queue.h
+
+1495635028 source:c:\users\aluno\desktop\spug\include\graph\vertex.c
+	<stdlib.h>
+	<stdio.h>
+	"vertex.h"
+	"../linkedList/linkedList.h"
+
+1495633380 source:c:\users\aluno\desktop\spug\include\linkedlist\linkedlist.c
+	<stdio.h>
+	<stdlib.h>
+	"linkedList.h"
+	"node.h"
+
+1495633383 source:c:\users\aluno\desktop\spug\include\linkedlist\node.c
+	<stdio.h>
+	<stdlib.h>
+	"node.h"
+
+1495635057 source:c:\users\aluno\desktop\spug\include\queue\queue.c
+	<stdlib.h>
+	<stdio.h>
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"queue.h"
+
+1495635062 source:c:\users\aluno\desktop\spug\include\stack\stack.c
+	<stdlib.h>
+	<stdio.h>
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"stack.h"
+
+1495634978 source:c:\users\aluno\desktop\spug\main.c
+	<stdio.h>
+	<stdlib.h>
+	"include/stack/stack.h"
+	"include/queue/queue.h"
+	"include/graph/graph.h"
+
+1495633380 source:c:\users\aluno\desktop\spug\bin\debug\linkedlist.c
+	<stdio.h>
+	<stdlib.h>
+	"linkedList.h"
+	"node.h"
+
+1495633344 c:\users\aluno\desktop\spug\bin\debug\linkedlist.h
+	"node.h"
+
+1495634683 c:\users\aluno\desktop\spug\bin\debug\node.h
+
+1495633383 source:c:\users\aluno\desktop\spug\bin\debug\node.c
+	<stdio.h>
+	<stdlib.h>
+	"node.h"
+
+1495635791 source:c:\users\aluno\desktop\spug\bin\debug\queue.c
+	<stdlib.h>
+	<stdio.h>
+	"linkedList.h"
+	"node.h"
+	"queue.h"
+
+1495634683 c:\users\aluno\desktop\spug\bin\debug\queue.h
+
+1495635851 source:c:\users\aluno\desktop\spug\bin\debug\stack.c
+	<stdlib.h>
+	<stdio.h>
+	"linkedList.h"
+	"node.h"
+	"stack.h"
+
+1495632286 c:\users\aluno\desktop\spug\bin\debug\stack.h
+
+1495635731 source:c:\users\aluno\desktop\spug\bin\debug\vertex.c
+	<stdlib.h>
+	<stdio.h>
+	"vertex.h"
+	"linkedList.h"
+
+1495634777 c:\users\aluno\desktop\spug\bin\debug\vertex.h
+	"../../include/linkedList/linkedList.h"
+
+1495635762 source:c:\users\aluno\desktop\spug\bin\debug\graph.c
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<limits.h>
+	"graph.h"
+	"vertex.h"
+	"linkedList.h"
+	"node.h"
+	"queue.h"
+	"stack.h"
+
+1495635745 c:\users\aluno\desktop\spug\bin\debug\graph.h
+	"vertex.h"
+	"stack.h"
+
+1495635592 source:c:\users\rodrigo\desktop\spug\include\graph\graph.c
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<limits.h>
+	"graph.h"
+	"vertex.h"
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"../../include/queue/queue.h"
+	"../../include/stack/stack.h"
+
+1495634094 c:\users\rodrigo\desktop\spug\include\graph\graph.h
+	"vertex.h"
+	"../stack/stack.h"
+
+1495634778 c:\users\rodrigo\desktop\spug\include\graph\vertex.h
+	"../../include/linkedList/linkedList.h"
+
+1495633346 c:\users\rodrigo\desktop\spug\include\linkedlist\linkedlist.h
+	"node.h"
+
+1495634684 c:\users\rodrigo\desktop\spug\include\linkedlist\node.h
+
+1495632288 c:\users\rodrigo\desktop\spug\include\stack\stack.h
+
+1495634684 c:\users\rodrigo\desktop\spug\include\queue\queue.h
+
+1495635030 source:c:\users\rodrigo\desktop\spug\include\graph\vertex.c
+	<stdlib.h>
+	<stdio.h>
+	"vertex.h"
+	"../linkedList/linkedList.h"
+
+1495633382 source:c:\users\rodrigo\desktop\spug\include\linkedlist\linkedlist.c
+	<stdio.h>
+	<stdlib.h>
+	"linkedList.h"
+	"node.h"
+
+1495633384 source:c:\users\rodrigo\desktop\spug\include\linkedlist\node.c
+	<stdio.h>
+	<stdlib.h>
+	"node.h"
+
+1495635058 source:c:\users\rodrigo\desktop\spug\include\queue\queue.c
+	<stdlib.h>
+	<stdio.h>
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"queue.h"
+
+1495635064 source:c:\users\rodrigo\desktop\spug\include\stack\stack.c
+	<stdlib.h>
+	<stdio.h>
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"stack.h"
+
+1497016849 source:c:\users\rodrigo\desktop\trabalho final\spug\include\graph\graph.c
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<limits.h>
+	"graph.h"
+	"vertex.h"
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"../../include/queue/queue.h"
+	"../../include/stack/stack.h"
+
+1497017889 c:\users\rodrigo\desktop\trabalho final\spug\include\graph\graph.h
+	"vertex.h"
+	"../stack/stack.h"
+
+1496413891 c:\users\rodrigo\desktop\trabalho final\spug\include\graph\vertex.h
+	"../../include/linkedList/linkedList.h"
+
+1496413891 c:\users\rodrigo\desktop\trabalho final\spug\include\linkedlist\linkedlist.h
+	"node.h"
+
+1496413891 c:\users\rodrigo\desktop\trabalho final\spug\include\linkedlist\node.h
+
+1497016192 c:\users\rodrigo\desktop\trabalho final\spug\include\stack\stack.h
+
+1497015535 c:\users\rodrigo\desktop\trabalho final\spug\include\queue\queue.h
+
+1496413891 source:c:\users\rodrigo\desktop\trabalho final\spug\include\graph\vertex.c
+	<stdlib.h>
+	<stdio.h>
+	"vertex.h"
+	"../linkedList/linkedList.h"
+
+1497015692 source:c:\users\rodrigo\desktop\trabalho final\spug\include\linkedlist\linkedlist.c
+	<stdio.h>
+	<stdlib.h>
+	"linkedList.h"
+	"node.h"
+
+1496413891 source:c:\users\rodrigo\desktop\trabalho final\spug\include\linkedlist\node.c
+	<stdio.h>
+	<stdlib.h>
+	"node.h"
+
+1497015948 source:c:\users\rodrigo\desktop\trabalho final\spug\include\queue\queue.c
+	<stdlib.h>
+	<stdio.h>
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"queue.h"
+
+1497016534 source:c:\users\rodrigo\desktop\trabalho final\spug\include\stack\stack.c
+	<stdlib.h>
+	<stdio.h>
+	"../../include/linkedList/linkedList.h"
+	"../../include/linkedList/node.h"
+	"stack.h"
+
+1497016580 source:c:\users\rodrigo\desktop\trabalho final\spug\main.c
+	<stdio.h>
+	<stdlib.h>
+	"include/stack/stack.h"
+	"include/queue/queue.h"
+	"include/graph/graph.h"
+
