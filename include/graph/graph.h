@@ -14,7 +14,7 @@
 typedef struct graphs graph_t;
 
 /* Cria um nodevo graph com id */
-graph_t *createGraph(int ID);
+graph_t* createGraph(int ID);
 
 /* Adiciona um vertex ao graph */
 vertex_t* graphAddVertex(graph_t* graph, int ID);
@@ -43,7 +43,7 @@ stack_t* Dijkstra(graph_t *graph, vertex_t* fonte, vertex_t* destinode);
 
 /* Procura um vertex com menoder a menoder distancia
  * Ver: struct vertexs */
-node_t* searchCloserVertex(linkedList_t *Q); // IMPLEMENTAR
+node_t* searchCloserVertex(linkedList_t* Q); // IMPLEMENTAR
 
 void bfs(graph_t* graph, vertex_t* initialVertex); // IMPLEMENTAR
 

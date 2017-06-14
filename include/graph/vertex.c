@@ -18,45 +18,45 @@
 
 struct vertexes
 {
-	int id;
+	int ID;
 	linkedList_t* edges;
 
 	/* Informacoes para componentes conexos */
-	int id_group;
+	int groupID;
 	vertex_t* dad;
 
 };
 
 struct edges {
 	int weight;
-	vertex_t *fonte;
-	vertex_t *dest;
+	vertex_t* sourceVertex;
+	vertex_t* destinyVertex;
 
 	/* status para expotacao em arquivo */
-	status_edge_t status;
+	edgeStatus_t status;
 };
 
 
-vertex_t* createVertex(int id)
+vertex_t* createVertex(int ID)
 {
-	vertex_t *p = NULL;
+	vertex_t* vertex = NULL;
 
-	p = malloc(sizeof(vertex_t));
+	vertex = malloc(sizeof(vertex_t));
 
-	if (p == NULL) {
+	if (vertex == NULL) {
 		perror("create_vertex:");
 		exit(EXIT_FAILURE);
 	}
 
-	p->id = id;
-	p->edges = createLinkedList();
-	p->id_group = -1;
-	p->dad = NULL;
+	vertex->ID = ID;
+	vertex->edges = createLinkedList();
+	vertex->groupID = -1;
+	vertex->dad = NULL;
 
-	return p;
+	return vertex;
 }
 
-int vertex_get_id(vertex_t *vertex)
+int vertexGetID(vertex_t* vertex)
 {
 	if (vertex == NULL)
 	{
@@ -64,25 +64,25 @@ int vertex_get_id(vertex_t *vertex)
 		exit(EXIT_FAILURE);
 	}
 
-	return vertex->id;
+	return vertex->ID;
 }
 
-edges_t *create_edge(vertex_t *fonte, vertex_t *destinode, int weight)
+edges_t* createEdge(vertex_t* source, vertex_t* vertex, int weight)
 {
-	edges_t *p;
+	edges_t* edge;
 
-	p = (edges_t*)malloc(sizeof(edges_t));
+	edge = (edges_t*)malloc(sizeof(edges_t));
 
-	if (p == NULL) {
+	if (edge == NULL) {
 		perror("create_edge:");
 		exit(EXIT_FAILURE);
 	}
 
-	p->weight = weight;
-	p->fonte = fonte;
-	p->dest = destinode;
+	edge->weight = weight;
+	edge->sourceVertex = source;
+	edge->destinyVertex = vertex;
 
-	return p;
+	return edge;
 }
 
 void adiciona_edge(vertex_t *vertex, edges_t *edge)
@@ -118,42 +118,42 @@ int edge_get_weight (edges_t *edge) {
 	return edge->weight;
 }
 
-vertex_t *edge_get_adjacente(edges_t *edge)
+vertex_t* edgeGetAdjacent(edges_t* edge)
 {
 	if (edge == NULL){
 		fprintf(stderr, "edge_get_adjacente: edge invalido\n");
 		exit(EXIT_FAILURE);
 	}
 
-	return edge->dest;
+	return edge->destinyVertex;
 }
 
-edges_t *procurar_adjacente(vertex_t *vertex, vertex_t *adjacente)
+edges_t *procurar_adjacente(vertex_t* vertex, vertex_t* adjacentVertex)
 {
-	node_t *node;
-	edges_t *edge;
+	node_t* node;
+	edges_t* edge;
 
 	if (vertex == NULL){
 		fprintf(stderr, "procurar_adjacente: edge invalido\n");
 		exit(EXIT_FAILURE);
 	}
 
-	node = obter_cabeca(vertex->edges);
+	node = getHead(vertex->edges);
 
 	while (node){
 
-		edge = obter_dado(node);
+		edge = getData(node);
 
-		if (edge->dest == adjacente || edge->fonte == adjacente)
+		if (edge->destinyVertex == adjacentVertex || edge->sourceVertex == adjacentVertex)
 			return edge;
 
-		node = obtem_next(node);
+		node = getNext(node);
 	}
 
 	return NULL;
 }
 
-status_edge_t edge_get_status (edges_t *edge)
+edgeStatus_t edgeGetStatus(edges_t* edge)
 {
 	if (edge == NULL){
 		fprintf(stderr, "edge_get_status: edge invalida\n");
@@ -163,7 +163,7 @@ status_edge_t edge_get_status (edges_t *edge)
 	return edge->status;
 }
 
-void edge_set_status(edges_t *edge, status_edge_t status)
+void edgeSetStatus(edges_t* edge, edgeStatus_t status)
 {
 	if (edge == NULL){
 		fprintf(stderr, "edge_set_status: edge invalida\n");
@@ -174,27 +174,27 @@ void edge_set_status(edges_t *edge, status_edge_t status)
 }
 
 /*------------------------------------------*/
-void vertex_set_group(vertex_t *vertex, int group) {
+void vertexSetGroup(vertex_t* vertex, int group) {
 
 	if (vertex == NULL){
 			fprintf(stderr, "vertex_set_group: vertex invalido\n");
 			exit(EXIT_FAILURE);
 	}
 
-	vertex->id_group = group;
+	vertex->groupID = group;
 }
 
-int vertex_get_group(vertex_t *vertex) {
+int vertexGetGroup(vertex_t* vertex) {
 
 	if (vertex == NULL){
 			fprintf(stderr, "vertex_get_group: vertex invalido\n");
 			exit(EXIT_FAILURE);
 	}
 
-	return vertex->id_group;
+	return vertex->groupID;
 }
 
-void vertex_set_dad(vertex_t *vertex, vertex_t *dad) {
+void vertexSetDad(vertex_t* vertex, vertex_t* dad) {
 
 	if (vertex == NULL){
 			fprintf(stderr, "vertex_set_dad: vertex invalido\n");

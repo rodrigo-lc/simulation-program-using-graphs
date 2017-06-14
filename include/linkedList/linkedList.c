@@ -204,7 +204,7 @@ node_t* removeHead(linkedList_t* list)
 	}
 
 	nextNode = getNext(list->head);
-	disconnectNode(removido);
+	disconnectNode(removedNode);
 	list->head = nextNode;
 	disconnectPreviousNode(nextNode);
 	list->size--;
@@ -221,7 +221,7 @@ void* removeNode(linkedList_t *list, node_t* removedNode)
 	node_t* nextNode;
 	node_t* previousNode;
 
-	if (list == NULL || node_removido == NULL){
+	if (list == NULL || removedNode == NULL){
 		fprintf(stderr,"remover_node: ponteiro invalido");
 		exit(EXIT_FAILURE);
 	}
@@ -236,13 +236,13 @@ void* removeNode(linkedList_t *list, node_t* removedNode)
 		if (myNode == removeHead)
             {
 
-			if (myNode == list->cabeca)
+			if (myNode == list->head)
 				removeHead(list);
 			else if (myNode == list->tail)
 				removeHead(list);
 			else
 			{
-				nextNode = obtem_next(myNode);
+				nextNode = getNext(myNode);
 				previousNode = getPrevious(myNode);
 				connectNodes(previousNode, nextNode);
 				list->size--;

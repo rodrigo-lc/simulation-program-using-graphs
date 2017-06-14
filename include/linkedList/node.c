@@ -41,7 +41,7 @@ node_t* createNode(void *data)
 
 void connectNodes(node_t* sourceNode, node_t* node)
 {
-    if (fonte == NULL || destinode == NULL){
+    if (sourceNode == NULL || node == NULL){
         fprintf(stderr,"liga_nodes: ponteiros invalidos");
         exit(EXIT_FAILURE);
     }
@@ -61,7 +61,7 @@ void disconnectNode(node_t *node)
     node->previous = NULL;
 }
 
-void desliga_node_previous (node_t *node)
+void disconnectPreviousNode(node_t* node)
 {
     if (node == NULL) {
         fprintf(stderr,"liga_nodes: ponteiros invalidos");
@@ -82,7 +82,7 @@ void desliga_node_next (node_t *node)
 }
 
 
-void *obter_dado (node_t *node)
+void* getData(node_t* node)
 {
     if (node == NULL) {
         fprintf(stderr,"liga_nodes: ponteiros invalidos");
@@ -92,7 +92,7 @@ void *obter_dado (node_t *node)
     return node->data;
 }
 
-node_t *obtem_next (node_t* node)
+node_t* getNext(node_t* node)
 {
     if (node == NULL) {
         fprintf(stderr,"liga_nodes: ponteiros invalidos");
@@ -102,7 +102,7 @@ node_t *obtem_next (node_t* node)
     return node->next;
 }
 
-node_t *obtem_previous (node_t *node)
+node_t* getPrevious(node_t* node)
 {
     if (node == NULL) {
         fprintf(stderr,"liga_nodes: ponteiros invalidos");

@@ -31,55 +31,34 @@
 #define INFINITO    INT_MAX
 //#define DEBUG
 
-
-
 struct graphs {
-	int id;
+	int ID;
 	linkedList_t* vertex;
 };
 
-
-void bfs(graph_t* graph, vertex_t* inicial)
-{
-
-
-
-
-}
-
-
-void dfs(graph_t* graph, vertex_t* inicial)
-{
-
-
-
-
-
-}
-
 //--------------------------------------------------------------------------------------
 
-graph_t *create_graph(int id)
+graph_t* createGraph(int ID)
 {
-	graph_t *p = NULL;
+	graph_t* graph = NULL;
 
-	p = (graph_t*) malloc(sizeof(graph_t));
+	graph = (graph_t*) malloc(sizeof(graph_t));
 
-	if (p == NULL)	{
+	if (graph == NULL)	{
 		perror("create_graph:");
 		exit(EXIT_FAILURE);
 	}
 
-	p->id = id;
-	p->vertex = create_list_enc();
+	graph->ID = ID;
+	graph->vertex = createLinkedList();
 
-	return p;
+	return graph;
 }
 
-vertex_t* graph_adicionar_vertex(graph_t *graph, int id)
+vertex_t* graphAddVertex(graph_t* graph, int ID)
 {
 	vertex_t* vertex;
-	node_t *node;
+	node_t* node;
 
 #ifdef DEBUG
 	printf("graph_adicionar_vertex: %d\n", id);
@@ -91,13 +70,13 @@ vertex_t* graph_adicionar_vertex(graph_t *graph, int id)
         exit(EXIT_FAILURE);
 	}
 
-	if (searchVertex(graph, id) != NULL)
+	if (searchVertex(graph, ID) != NULL)
     {
 		fprintf(stderr,"graph_adicionar_vertex: vertex duplicado!\n");
 		exit(EXIT_FAILURE);
 	}
 
-	vertex = createVertex(id);
+	vertex = createVertex(ID);
 	node = createNode(vertex);
 
     addTail(graph->vertex, node);
@@ -143,8 +122,8 @@ vertex_t* searchVertex(graph_t* graph, int ID)
 void adiciona_adjacentes(graph_t *graph, vertex_t* vertex, int n, ...)
 {
 	va_list argumentos;
-	vertex_t *sucessor;
-	edges_t *edge;
+	vertex_t* sucessor;
+	edges_t* edge;
 
 	int id_sucessor;
 	int weight;
@@ -181,15 +160,15 @@ void adiciona_adjacentes(graph_t *graph, vertex_t* vertex, int n, ...)
 
 void exportGraphDot(const char* filename, graph_t* graph)
 {
-	FILE *file;
+	FILE* file;
 
-	node_t *node_vert;
-	node_t *node_arest;
-	vertex_t *vertex;
-	vertex_t *adjacente;
-	edges_t *edge;
-	edges_t *contra_edge;
-	linkedList_t *list_edges;
+	node_t* vertexNode;
+	node_t* edgeNode;
+	vertex_t* vertex;
+	vertex_t* adjacentVertex;
+	edges_t* edge;
+	edges_t* counterEdge;
+	linkedList_t* edgeList;
 
 	int weight;
 
@@ -208,56 +187,57 @@ void exportGraphDot(const char* filename, graph_t* graph)
 	fprintf(file, "graph {\n");
 
 	//obtem todos os nodes da list
-	node_vert = obter_cabeca(graph->vertex);
+	vertexNode = getHead(graph->vertex);
 
-	while (node_vert){
-		vertex = obter_dado(node_vert);
+	while (vertexNode){
+		vertex = getData(vertexNode);
 
 		//obtem todos as edges
-		list_edges = vertex_get_edges(vertex);
+		edgeList = vertexGetEdges(vertex);
 
-		node_arest = obter_cabeca(list_edges);
-		while (node_arest) {
-			edge = obter_dado(node_arest);
+		edgeNode = getHead(edgeList);
+		while (edgeNode) {
+			edge = getData(edgeNode);
 
 			//ignodera caso já exportada
-			if (edge_get_status(edge) == EXPORTADA) {
-				node_arest = obtem_next(node_arest);
+			if (edgeGetStatus(edge) == EXPORTADA) {
+				edgeNode = getNext(edgeNode);
 				continue;
 			}
 
 			//marca como exportada esta edge
-			edge_set_status(edge, EXPORTADA);
-			adjacente = edge_get_adjacente(edge);
+			edgeSetStatus(edge, EXPORTADA);
+			adjacentVertex = edgeGetAdjacent(edge);
 
 			//marca contra-edge também como exporta node caso de graph não direcionados
-			contra_edge = procurar_adjacente(adjacente, vertex);
-			edge_set_status(contra_edge, EXPORTADA);
+			counterEdge = searchAdjacent(adjacentVertex, vertex);
+			edgeSetStatus(counterEdge, EXPORTADA);
 
 			//obtem weight
-			weight = edge_get_weight(edge);
+			weight = edgeGetWeight(edge);
 
 			fprintf(file, "\t%d -- %d [label = %d];\n",
-					vertex_get_id(vertex),
-					vertex_get_id(adjacente),
+					vertexGetID(vertex),
+					vertexGetID(adjacentVertex),
                     weight);
 
-			node_arest = obtem_next(node_arest);
+			edgeNode = getNext(edgeNode);
 		}
-		node_vert = obtem_next(node_vert);
+		vertexNode = getNext(vertexNode);
 	}
 	fprintf(file, "}\n");
 	fclose(file);
 }
 
 
-void freeGraph (graph_t* graph){
-	node_t *node_vert;
-	node_t *node_arest;
-	node_t *node_liberado;
-	vertex_t *vertex;
-	edges_t *edge;
-	linkedList_t *list_edges;
+void freeGraph(graph_t* graph)
+{
+	node_t* vertexNode;
+	node_t* edgeNode;
+	node_t* freeNode;
+	vertex_t* vertex;
+	edges_t* edge;
+	linkedList_t* edgeList;
 
 	if (graph == NULL) {
 		fprintf(stderr, "libera_graph: graph invalido\n");
@@ -265,33 +245,33 @@ void freeGraph (graph_t* graph){
 	}
 
 	//varre todos os vertexs
-	node_vert = obter_cabeca(graph->vertex);
-	while (node_vert){
-		vertex = obter_dado(node_vert);
+	vertexNode = getHead(graph->vertex);
+	while (vertexNode){
+		vertex = getData(vertexNode);
 
 		//libera todas as edges
-		list_edges = vertex_get_edges(vertex);
-		node_arest = obter_cabeca(list_edges);
-		while (node_arest){
-			edge = obter_dado(node_arest);
+		edge = vertexGetEdges(vertex);
+		edgeNode = getHead(edgeList);
+		while (edgeNode){
+			edge = getData(edgeNode);
 
 			//libera edge
 			free(edge);
 
 			//libera node da lsita
-			node_liberado = node_arest;
-			node_arest = obtem_next(node_arest);
-			free(node_liberado);
+			freeNode = edgeNode;
+			edgeNode = getNext(edgeNode);
+			free(freeNode);
 		}
 
 		//libera list de edges e vertex
-		free(list_edges);
+		free(edgeList);
 		free(vertex);
 
 		//libera node da list
-		node_liberado = node_vert;
-		node_vert = obtem_next(node_vert);
-		free(node_liberado);
+		freeNode = vertexNode;
+		vertexNode = getNext(vertexNode);
+		free(freeNode);
 	}
 
 	//libera graph e vertex
