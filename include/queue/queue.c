@@ -50,21 +50,21 @@ void enqueue(void* data, queue_t *queue)
 }
 
 //retira elemento do topo
-void *dequeue(queue_t *queue)
+void* dequeue(queue_t *queue)
 {
-	node_t *node;
-	void *dado;
+	node_t* node;
+	void* data;
 
     if (queue == NULL){
         fprintf(stderr, "dequeue: queue invalida!\n");
         exit(EXIT_FAILURE);
     }
 
-    node = remover_cabeca(queue->list);
-    dado = obter_dado(node);
+    node = removeHead(queue->list);
+    data = getData(node);
     free(node);
 
-    return dado;
+    return data;
 }
 
 

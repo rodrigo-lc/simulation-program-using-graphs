@@ -6,19 +6,18 @@
 typedef struct linkedLists linkedList_t;
 
 linkedList_t* createLinkedList(void);
-void add_tail(linkedList_t *list, node_t* elemento);
-node_t* obter_cabeca(linkedList_t *list);
+void addTail(linkedList_t *list, node_t* element);
+node_t* getHead(linkedList_t* list);
 
-int list_empty(linkedList_t *list);
-node_t* remove_tail(linkedList_t *list);
-node_t* remove_cabeca(linkedList_t *list);
+int emptyList(linkedList_t* list);
+node_t* removeTail(linkedList_t* list);
+node_t* removeHead(linkedList_t* list);
 
-void print_list (linkedList_t *list);
-void print_list_tras (linkedList_t *list);
+void printList(linkedList_t *list);
+void printInvertedList(linkedList_t *list);
 
 /* Retorna o dado de um node removido*
  * node_removido é liberado da memoória  */
-void *remove_node(linkedList_t* list, node_t *node_removido);
-
+void* removeNode(linkedList_t* list, node_t* removedNode);
 
 #endif // LISTA_ENC_H_INCLUDED

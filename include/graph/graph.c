@@ -4,7 +4,7 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        05/07/2016
  Version:           1.0
- Last modification: 24/05/2017
+ Last modification: 14/06/2017
  Copyright:         MIT License
  Description:       Graphs using data structures such as: linked lists, stacks and
                     queues
@@ -28,12 +28,12 @@
 // Defines
 #define FALSE       0
 #define TRUE        1
-#define INFINITO    INT_MAX
+#define INFINITE    INT_MAX
 //#define DEBUG
 
 struct graphs {
 	int ID;
-	linkedList_t* vertex;
+	linkedList_t* vertexList;
 };
 
 //--------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ graph_t* createGraph(int ID)
 	}
 
 	graph->ID = ID;
-	graph->vertex = createLinkedList();
+	graph->vertexList = createLinkedList();
 
 	return graph;
 }
@@ -79,7 +79,7 @@ vertex_t* graphAddVertex(graph_t* graph, int ID)
 	vertex = createVertex(ID);
 	node = createNode(vertex);
 
-    addTail(graph->vertex, node);
+    addTail(graph->vertexList, node);
 
 	return vertex;
 }
@@ -96,10 +96,10 @@ vertex_t* searchVertex(graph_t* graph, int ID)
 		exit(EXIT_FAILURE);
 	}
 
-	if (emptyList(graph->vertex) == TRUE)
+	if (emptyList(graph->vertexList) == TRUE)
 		return FALSE;
 
-	nodeList = getHead(graph->vertex);
+	nodeList = getHead(graph->vertexList);
 
 	while (nodeList)
 	{
@@ -119,33 +119,33 @@ vertex_t* searchVertex(graph_t* graph, int ID)
 	return NULL;
 }
 
-void adiciona_adjacentes(graph_t *graph, vertex_t* vertex, int n, ...)
+void addAdjacents(graph_t *graph, vertex_t* vertex, int n, ...)
 {
-	va_list argumentos;
-	vertex_t* sucessor;
+	va_list arguments;
+	vertex_t* nextVertex;
 	edges_t* edge;
 
-	int id_sucessor;
+	int nextID;
 	int weight;
-        int x;
+    int x;
 
 	/* Initializing arguments to store all values after num */
-	va_start (argumentos, n);
+	va_start (arguments, n);
 
 	for (x = 0; x < n; x=x+2 )
 	{
-		id_sucessor = va_arg(argumentos, int);
-		weight = va_arg(argumentos, int);
+		nextID = va_arg(arguments, int);
+		weight = va_arg(arguments, int);
 
-		sucessor = procura_vertex(graph, id_sucessor);
+		nextVertex = searchVertex(graph, nextID);
 
-		if (sucessor == NULL) {
+		if (nextVertex == NULL) {
 			fprintf(stderr, "adiciona_adjacentes: sucessor nao encontrado node graph\n");
 			exit(EXIT_FAILURE);
 		}
 
-		edge = create_edge(vertex, sucessor,weight);
-		adiciona_edge(vertex, edge);
+		edge = createEdge(vertex, nextVertex, weight);
+		addEdge(vertex, edge);
 
 #ifdef DEBUG
 		printf("\tvertex: %d\n", vertex_get_id(vertex));
@@ -155,7 +155,7 @@ void adiciona_adjacentes(graph_t *graph, vertex_t* vertex, int n, ...)
 
 	}
 
-	va_end (argumentos);
+	va_end (arguments);
 }
 
 void exportGraphDot(const char* filename, graph_t* graph)
@@ -187,7 +187,7 @@ void exportGraphDot(const char* filename, graph_t* graph)
 	fprintf(file, "graph {\n");
 
 	//obtem todos os nodes da list
-	vertexNode = getHead(graph->vertex);
+	vertexNode = getHead(graph->vertexList);
 
 	while (vertexNode){
 		vertex = getData(vertexNode);
@@ -245,7 +245,7 @@ void freeGraph(graph_t* graph)
 	}
 
 	//varre todos os vertexs
-	vertexNode = getHead(graph->vertex);
+	vertexNode = getHead(graph->vertexList);
 	while (vertexNode){
 		vertex = getData(vertexNode);
 
@@ -275,6 +275,6 @@ void freeGraph(graph_t* graph)
 	}
 
 	//libera graph e vertex
-	free(graph->vertex);
+	free(graph->vertexList);
 	free(graph);
 }

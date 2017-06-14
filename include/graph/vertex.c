@@ -85,21 +85,21 @@ edges_t* createEdge(vertex_t* source, vertex_t* vertex, int weight)
 	return edge;
 }
 
-void adiciona_edge(vertex_t *vertex, edges_t *edge)
+void addEdge(vertex_t* vertex, edges_t* edge)
 {
-	node_t *node;
+	node_t* node;
 
 	if (vertex == NULL || edge == NULL)	{
 		fprintf(stderr, "adiciona_edge: data invalidos\n");
 		exit(EXIT_FAILURE);
 	}
 
-	node = create_node(edge);
-	add_tail(vertex->edges, node);
+	node = createNode(edge);
+	addTail(vertex->edges, node);
 
 }
 
-linkedList_t *vertex_get_edges(vertex_t *vertex)
+linkedList_t* vertexGetEdges(vertex_t *vertex)
 {
 	if (vertex == NULL){
 		fprintf(stderr, "vertex_get_edges: vertex invalido\n");
@@ -109,7 +109,7 @@ linkedList_t *vertex_get_edges(vertex_t *vertex)
 	return vertex->edges;
 }
 
-int edge_get_weight (edges_t *edge) {
+int edgeGetWeight(edges_t* edge) {
 	if (edge == NULL){
 		fprintf(stderr, "edge_get_weight: edge invalido\n");
 		exit(EXIT_FAILURE);
@@ -128,7 +128,7 @@ vertex_t* edgeGetAdjacent(edges_t* edge)
 	return edge->destinyVertex;
 }
 
-edges_t *procurar_adjacente(vertex_t* vertex, vertex_t* adjacentVertex)
+edges_t* searchAdjacent(vertex_t* vertex, vertex_t* adjacentVertex)
 {
 	node_t* node;
 	edges_t* edge;

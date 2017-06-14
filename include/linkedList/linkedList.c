@@ -91,9 +91,9 @@ void printList (linkedList_t *list)
     node = list->head;
 
     while (node){
-        printf("Dados: %p\n", obter_dado(node));
+        printf("Dados: %p\n", getData(node));
 
-        node = obtem_next(node);
+        node = getNext(node);
     }
 }
 
@@ -109,19 +109,19 @@ void print_list_tras (linkedList_t *list)
     node = list->tail;
 
     while (node){
-        printf("Dados: %p\n", obter_dado(node));
+        printf("Dados: %p\n", getData(node));
 
-        node = obtem_previous(node);
+        node = getHead(node);
     }
 }
 
 int emptyList(linkedList_t* list)
 {
-	int ret;
+	int returnValue;
 
-	(list->size == 0) ? (ret = TRUE) : (ret = FALSE);
+	(list->size == 0) ? (returnValue = TRUE) : (returnValue = FALSE);
 
-	return ret;
+	return returnValue; // TRUE OR FALSE
 }
 
 node_t* getHead(linkedList_t* list){
@@ -146,10 +146,10 @@ node_t* getTail(linkedList_t* list){
 	return list->tail;
 }
 
-node_t *removeTail(linkedList_t *list)
+node_t* removeTail(linkedList_t *list)
 {
-	node_t *previousNode;
-	node_t *removedNode;
+	node_t* previousNode;
+	node_t* removedNode;
 
 	if (list == NULL){
 	    fprintf(stderr,"remover_tail: ponteiro invalido");
