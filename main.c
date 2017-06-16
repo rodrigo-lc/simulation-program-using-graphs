@@ -84,8 +84,8 @@ int main(void)
 
 	exportGraphDot("graph.dot", graph);
 
-	//freeQueue(queue);
-	//freeGraph(graph);
+	freeQueue(queue);
+	freeGraph(graph);
 
 
 	return EXIT_SUCCESS;

@@ -250,7 +250,7 @@ void freeGraph(graph_t* graph)
 		vertex = getData(vertexNode);
 
 		//libera todas as edges
-		edge = vertexGetEdges(vertex);
+		edgeList = vertexGetEdges(vertex);
 		edgeNode = getHead(edgeList);
 		while (edgeNode){
 			edge = getData(edgeNode);
@@ -258,7 +258,7 @@ void freeGraph(graph_t* graph)
 			//libera edge
 			free(edge);
 
-			//libera node da lsita
+			//libera node da lista
 			freeNode = edgeNode;
 			edgeNode = getNext(edgeNode);
 			free(freeNode);
