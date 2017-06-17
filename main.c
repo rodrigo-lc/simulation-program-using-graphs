@@ -1,14 +1,15 @@
 /*
  =============================================================================
- Name        : graphs.c
- Author      :
- Version     :
- Copyright   : Renan Augusto Starke, todos os direitos reservados
- Description : graphs com list encadeadas, Ansi-style
-             : estruturas disponiveis:
-             : pilha e fila
+ Name:              main.c
+ Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
+ Created on:        16/06/2017
+ Version:           1.0
+ Last modification: 16/06/2017
+ Copyright:         MIT License
+ Description :      Simulation Program Using Graphs
  =============================================================================
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,28 +17,35 @@
 #include "include/queue/queue.h"
 #include "include/graph/graph.h"
 
+#define DEBUG
+
 int main(void)
 {
 	graph_t*    graph;
 	vertex_t*   vertex;
 	queue_t*    queue;
-	int ID;
+	int ID, i;
 
 	graph = createGraph(0);
 	queue = createQueue();
 
 	//Adiciona todos os vertexs node graph
-	vertex = graphAddVertex(graph, 1);
-	enqueue(vertex, queue);
+	for(i=1; i<14; i++)
+    {
+        vertex = graphAddVertex(graph, i);
+        enqueue(vertex, queue);
 
+        #ifdef DEBUG
+        printVertex(vertex);
+        #endif
+    }
 
-    // constrÃ³i graph
-	//while (!emptyQueue(queue))
-   // {
-	//	vertex = dequeue(queue);
-		//ID = vertexGetID(vertex);
+    // constrói graph
+	while (!isQueueEmpty(queue))
+    {
+		vertex = dequeue(queue);
+        ID = vertexGetID(vertex);
 
-    /*
 		switch(ID){
 			case 1:
 				addAdjacents(graph, vertex, 6, 6, 14, 2, 7, 3, 9);
@@ -78,13 +86,12 @@ int main(void)
 			default:
 				break;
 		}
-		*/
-	//}
+    }
 
-	//exportGraphDot("graph.dot", graph);
+	exportGraphDot("graph.dot", graph);
 
-	//freeQueue(queue);
-	//freeGraph(graph);
+	freeQueue(queue);
+	freeGraph(graph);
 
 
 	return EXIT_SUCCESS;

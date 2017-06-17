@@ -1,91 +1,83 @@
-/*
- ==============================================================================
- Name:              nodede.c
- Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
- Created on:        05/07/2016
- Version:           1.0
- Last modification: 24/05/2017
- Copyright:         MIT License
- Description:       Node structures for using in linked lists
- ==============================================================================
- */
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "node.h"
 
-struct nodes
+struct nodes    // Nodes for a doubly linked list
 {
     void*   data;
-    node_t  *next;
-    node_t  *previous;
+    node_t* nextNode;
+    node_t* previousNode;
 };
 
-// Cria um nodevo node
-node_t* createNode(void *data)
+node_t* createNode(void* data)
 {
-    node_t *p = malloc(sizeof(node_t));
+    node_t* node = malloc(sizeof(node_t));
 
-    if (p == NULL){
-        perror("cria_node:");
+    if (node == NULL)
+    {
+        perror("createNode:");
         exit(EXIT_FAILURE);
     }
 
-    p->data = data;
-    p->next = NULL;
-    p->previous = NULL;
+    node->data = data;
+    node->nextNode = NULL;
+    node->previousNode = NULL;
 
-    return p;
+    return node;
 }
 
 void connectNodes(node_t* sourceNode, node_t* node)
 {
     if (sourceNode == NULL || node == NULL){
-        fprintf(stderr,"liga_nodes: ponteiros invalidos");
+        fprintf(stderr, "connectNodes: Invalid nodes!");
         exit(EXIT_FAILURE);
     }
 
-    sourceNode->next = node;
-    node->previous = sourceNode;
+    sourceNode->nextNode = node;
+    node->previousNode = sourceNode;
 }
 
 void disconnectNode(node_t *node)
 {
     if (node == NULL) {
-        fprintf(stderr,"liga_nodes: ponteiros invalidos");
+        fprintf(stderr, "disconnectNode: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-    node->next = NULL;
-    node->previous = NULL;
+    node->nextNode = NULL;
+    node->previousNode = NULL;
 }
 
 void disconnectPreviousNode(node_t* node)
 {
-    if (node == NULL) {
-        fprintf(stderr,"liga_nodes: ponteiros invalidos");
+    if (node == NULL)
+    {
+        fprintf(stderr, "disconnectPreviousNode: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-    node->previous = NULL;
+    node->previousNode = NULL;
 }
 
-void desliga_node_next (node_t *node)
+void disconnectNextNode(node_t *node)
 {
-    if (node == NULL) {
-        fprintf(stderr,"liga_nodes: ponteiros invalidos");
+    if (node == NULL)
+    {
+        fprintf(stderr, "disconnectNextNode: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-    node->next = NULL;
+    node->nextNode = NULL;
 }
 
 
 void* getData(node_t* node)
 {
-    if (node == NULL) {
-        fprintf(stderr,"liga_nodes: ponteiros invalidos");
+    if (node == NULL)
+    {
+        fprintf(stderr, "getData: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
@@ -94,20 +86,22 @@ void* getData(node_t* node)
 
 node_t* getNext(node_t* node)
 {
-    if (node == NULL) {
-        fprintf(stderr,"liga_nodes: ponteiros invalidos");
+    if (node == NULL)
+    {
+        fprintf(stderr, "getNext: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-    return node->next;
+    return node->nextNode;
 }
 
 node_t* getPrevious(node_t* node)
 {
-    if (node == NULL) {
-        fprintf(stderr,"liga_nodes: ponteiros invalidos");
+    if (node == NULL)
+    {
+        fprintf(stderr, "getPrevious: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-    return node->previous;
+    return node->previousNode;
 }

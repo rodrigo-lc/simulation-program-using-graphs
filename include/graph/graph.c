@@ -4,7 +4,7 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        05/07/2016
  Version:           1.0
- Last modification: 14/06/2017
+ Last modification: 16/06/2017
  Copyright:         MIT License
  Description:       Graphs using data structures such as: linked lists, stacks and
                     queues
@@ -26,10 +26,11 @@
 #include "../../include/stack/stack.h"
 
 // Defines
+//#define DEBUG
 #define FALSE       0
 #define TRUE        1
 #define INFINITE    INT_MAX
-//#define DEBUG
+
 
 struct graphs {
 	int ID;
@@ -44,8 +45,9 @@ graph_t* createGraph(int ID)
 
 	graph = (graph_t*) malloc(sizeof(graph_t));
 
-	if (graph == NULL)	{
-		perror("create_graph:");
+	if (graph == NULL)
+    {
+		perror("createGraph:");
 		exit(EXIT_FAILURE);
 	}
 
@@ -61,18 +63,18 @@ vertex_t* graphAddVertex(graph_t* graph, int ID)
 	node_t* node;
 
 #ifdef DEBUG
-	printf("graph_adicionar_vertex: %d\n", id);
+	printf("graphAddVertex: %d\n", ID);
 #endif
 
 	if (graph == NULL)
     {
-        fprintf(stderr,"graph_adicionar_vertex: graph invalido!");
+        fprintf(stderr,"graphAddVertex: Invalid graph!");
         exit(EXIT_FAILURE);
 	}
 
 	if (searchVertex(graph, ID) != NULL)
     {
-		fprintf(stderr,"graph_adicionar_vertex: vertex duplicado!\n");
+		fprintf(stderr,"graphAddVertex: Duplicated vertexes!\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -92,34 +94,34 @@ vertex_t* searchVertex(graph_t* graph, int ID)
 
 	if (graph == NULL)
     {
-		fprintf(stderr,"procura_vertex: graph invalido!");
+		fprintf(stderr, "searchVertex: Invalid graph!");
 		exit(EXIT_FAILURE);
 	}
 
-	if (emptyList(graph->vertexList) == TRUE)
+	if (isListEmpty(graph->vertexList) == TRUE)
 		return FALSE;
 
 	nodeList = getHead(graph->vertexList);
 
 	while (nodeList)
 	{
-		//obtem o endereco da list
+		// Get list address
 		vertex = getData(nodeList);
 
-		//obterm o id do vertex
+		// Get ID
 		myID = vertexGetID(vertex);
 
-		if (myID == ID) {
+		if (myID == ID)
+        {
 			return vertex;
 		}
 
-		nodeList = (nodeList);
+		nodeList = getNext(nodeList);
 	}
-
 	return NULL;
 }
 
-void addAdjacents(graph_t *graph, vertex_t* vertex, int n, ...)
+void addAdjacents(graph_t* graph, vertex_t* vertex, int n, ...)
 {
 	va_list arguments;
 	vertex_t* nextVertex;
@@ -127,20 +129,21 @@ void addAdjacents(graph_t *graph, vertex_t* vertex, int n, ...)
 
 	int nextID;
 	int weight;
-    int x;
+    int i;
 
-	/* Initializing arguments to store all values after num */
+	// Initializing arguments to store all values after num
 	va_start (arguments, n);
 
-	for (x = 0; x < n; x=x+2 )
+	for (i = 0; i < n; (i = (i + 2)))
 	{
 		nextID = va_arg(arguments, int);
 		weight = va_arg(arguments, int);
 
 		nextVertex = searchVertex(graph, nextID);
 
-		if (nextVertex == NULL) {
-			fprintf(stderr, "adiciona_adjacentes: sucessor nao encontrado node graph\n");
+		if (nextVertex == NULL)
+        {
+			fprintf(stderr, "addAdjacents: Cannot find next vertex in graph\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -148,12 +151,12 @@ void addAdjacents(graph_t *graph, vertex_t* vertex, int n, ...)
 		addEdge(vertex, edge);
 
 #ifdef DEBUG
-		printf("\tvertex: %d\n", vertex_get_id(vertex));
-		printf("\tsucessor: %d\n", id_sucessor);
-		printf("\tweight: %d\n", weight);
+		printf("\tVertexID: %d\n", vertexGetID(vertex));
+		printf("\tNext: %d\n", nextID);
+		printf("\tWeight: %d\n", weight);
 #endif
 
-	}
+	} // end for
 
 	va_end (arguments);
 }
@@ -172,15 +175,16 @@ void exportGraphDot(const char* filename, graph_t* graph)
 
 	int weight;
 
-	if (filename == NULL || graph == NULL){
-		fprintf(stderr, "export_grafp_dot: ponteiros invalidos\n");
+	if (filename == NULL || graph == NULL)
+    {
+		fprintf(stderr, "exportGraphDot: Invalid pointers!\n");
 		exit(EXIT_FAILURE);
 	}
 
 	file = fopen(filename, "w");
 
 	if (file == NULL){
-		perror("export_grafp_dot:");
+		perror("exportGraphDot:");
 		exit(EXIT_FAILURE);
 	}
 
@@ -196,22 +200,24 @@ void exportGraphDot(const char* filename, graph_t* graph)
 		edgeList = vertexGetEdges(vertex);
 
 		edgeNode = getHead(edgeList);
-		while (edgeNode) {
+		while (edgeNode)
+        {
 			edge = getData(edgeNode);
 
 			//ignodera caso já exportada
-			if (edgeGetStatus(edge) == EXPORTADA) {
+			if (edgeGetStatus(edge) == EXPORTED)
+            {
 				edgeNode = getNext(edgeNode);
 				continue;
 			}
 
 			//marca como exportada esta edge
-			edgeSetStatus(edge, EXPORTADA);
+			edgeSetStatus(edge, EXPORTED);
 			adjacentVertex = edgeGetAdjacent(edge);
 
 			//marca contra-edge também como exporta node caso de graph não direcionados
 			counterEdge = searchAdjacent(adjacentVertex, vertex);
-			edgeSetStatus(counterEdge, EXPORTADA);
+			edgeSetStatus(counterEdge, EXPORTED);
 
 			//obtem weight
 			weight = edgeGetWeight(edge);
@@ -239,42 +245,45 @@ void freeGraph(graph_t* graph)
 	edges_t* edge;
 	linkedList_t* edgeList;
 
-	if (graph == NULL) {
-		fprintf(stderr, "libera_graph: graph invalido\n");
+	if (graph == NULL)
+    {
+		fprintf(stderr, "freeGraph: Invalid graph!\n");
 		exit(EXIT_FAILURE);
 	}
 
-	//varre todos os vertexs
+	// Navegation in list of vertexes
 	vertexNode = getHead(graph->vertexList);
-	while (vertexNode){
+	while (vertexNode)
+    {
 		vertex = getData(vertexNode);
 
-		//libera todas as edges
-		edge = vertexGetEdges(vertex);
+		// Free every edge
+		edgeList = vertexGetEdges(vertex);
 		edgeNode = getHead(edgeList);
-		while (edgeNode){
+		while (edgeNode)
+        {
 			edge = getData(edgeNode);
 
-			//libera edge
+			// Free edge
 			free(edge);
 
-			//libera node da lsita
+			// Free list node
 			freeNode = edgeNode;
 			edgeNode = getNext(edgeNode);
 			free(freeNode);
 		}
 
-		//libera list de edges e vertex
+		// Free edge list and vertex
 		free(edgeList);
 		free(vertex);
 
-		//libera node da list
+		// Free list node
 		freeNode = vertexNode;
 		vertexNode = getNext(vertexNode);
 		free(freeNode);
 	}
 
-	//libera graph e vertex
+	// Free vertex list and graph
 	free(graph->vertexList);
 	free(graph);
 }

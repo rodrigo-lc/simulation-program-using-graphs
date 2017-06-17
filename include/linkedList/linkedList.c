@@ -4,9 +4,9 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        05/07/2016
  Version:           1.0
- Last modification: 24/05/2017
+ Last modification: 16/06/2017
  Copyright:         MIT License
- Description:       Vertex structures for using in applications using graphs
+ Description:       Linked lists for data structures
  ==============================================================================
  */
 
@@ -16,29 +16,29 @@
 #include "linkedList.h"
 #include "node.h"
 
+//#define DEBUG
 #define FALSE 0
 #define TRUE 1
 
-//#define DEBUG
-
 struct linkedLists {
-    node_t* head;
-    node_t* tail;
+    node_t* headNode;
+    node_t* tailNode;
     int size;
 };
 
 //create uma list empty
-linkedList_t* createLinkedList(void) {
+linkedList_t* createLinkedList(void)
+{
     linkedList_t* list = malloc(sizeof(linkedList_t));
 
     if (list == NULL)
     {
-        perror("create_list_enc:");
+        perror("createLinkedList:");
         exit(EXIT_FAILURE);
     }
 
-    list->head = NULL;
-    list->tail = NULL;
+    list->headNode = NULL;
+    list->tailNode = NULL;
     list->size = 0;
 
     return list;
@@ -47,75 +47,78 @@ linkedList_t* createLinkedList(void) {
 void addTail(linkedList_t* list, node_t* node)
 {
     if (list == NULL || node == NULL){
-        fprintf(stderr,"add_tail: ponteiros invalidos");
+        fprintf(stderr,"addTail: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
    #ifdef DEBUG
-   printf("Adicionando %p --- tamanho: %d\n", elemento, list->tamanho);
+   printf("Adicionando %p --- tamanho: %d\n", node, list->size);
    #endif // DEBUG
 
-   //list empty
+   // empty list
    if (list->size == 0)
    {
         #ifdef DEBUG
-        printf("add_tail: add primeiro elemento: %p\n", elemento);
+        printf("add_tail: add primeiro elemento: %p\n", node);
         #endif // DEBUG
 
-        list->tail = node;
-        list->head = node;
+        list->tailNode = node;
+        list->headNode = node;
         list->size++;
 
         disconnectNode(node);
    }
-   else {
+   else
+   {
         // Remove qualquer ligacao antiga
         disconnectNode(node);
         // Liga tail da list com nodevo elemento
-        connectNodes(list->tail, node);
+        connectNodes(list->tailNode, node);
 
-        list->tail = node;
+        list->tailNode = node;
         list->size++;
    }
 }
 
-void printList (linkedList_t *list)
+void printList(linkedList_t* list)
 {
     node_t* node = NULL;
 
-    if (list == NULL){
-        fprintf(stderr,"print_list: ponteiros invalidos");
+    if (list == NULL)
+    {
+        fprintf(stderr, "printList: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-    node = list->head;
-
-    while (node){
-        printf("Dados: %p\n", getData(node));
-
+    // Node list navegation to print list
+    node = list->headNode;
+    while (node)
+    {
+        printf("Data: %p\n", getData(node));
         node = getNext(node);
     }
 }
 
-void print_list_tras (linkedList_t *list)
+void printListReverse(linkedList_t* list)
 {
-    node_t *node = NULL;
+    node_t* node = NULL;
 
-    if (list == NULL){
-        fprintf(stderr,"print_list: ponteiros invalidos");
+    if (list == NULL)
+    {
+        fprintf(stderr, "printListReverse: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-    node = list->tail;
-
-    while (node){
-        printf("Dados: %p\n", getData(node));
-
-        node = getHead(node);
+    // Node list navegation to print list from tail to head
+    node = list->tailNode;
+    while (node)
+    {
+        printf("Data: %p\n", getData(node));
+        node = getPrevious(node);
     }
 }
 
-int emptyList(linkedList_t* list)
+int isListEmpty(linkedList_t* list)
 {
 	int returnValue;
 
@@ -128,22 +131,22 @@ node_t* getHead(linkedList_t* list){
 
 	if (list == NULL)
     {
-        fprintf(stderr,"obter_cabeca: ponteiros invalidos");
+        fprintf(stderr, "getHead: Invalid pointer!");
         exit(EXIT_FAILURE);
     }
 
-	return list->head;
+	return list->headNode;
 }
 
 node_t* getTail(linkedList_t* list){
 
 	if (list == NULL)
     {
-		fprintf(stderr,"obter_cabeca: ponteiros invalidos");
+		fprintf(stderr, "getTail: Invalid pointer!");
 		exit(EXIT_FAILURE);
 	}
 
-	return list->tail;
+	return list->tailNode;
 }
 
 node_t* removeTail(linkedList_t *list)
@@ -151,28 +154,29 @@ node_t* removeTail(linkedList_t *list)
 	node_t* previousNode;
 	node_t* removedNode;
 
-	if (list == NULL){
-	    fprintf(stderr,"remover_tail: ponteiro invalido");
+	if (list == NULL)
+    {
+	    fprintf(stderr, "removeTail: Invalid pointer!");
 	    exit(EXIT_FAILURE);
 	}
 
-	if (list->tail == NULL)
+	if (list->tailNode == NULL)
 		return NULL;
 
-	removedNode = list->tail;
+	removedNode = list->tailNode;
 
-	if (list->tail == list->head) {
+	if (list->tailNode == list->headNode) {
 		list->size = 0;
 
-		list->tail = NULL;
-		list->head = NULL;
+		list->tailNode = NULL;
+		list->headNode = NULL;
 
 		return removedNode;
 	}
 
-	previousNode = getPrevious(list->tail);
+	previousNode = getPrevious(list->tailNode);
 	disconnectNode(removedNode);
-	list->tail = previousNode;
+	list->tailNode = previousNode;
 	disconnectNode(previousNode);
 	list->size--;
 
@@ -184,36 +188,36 @@ node_t* removeHead(linkedList_t* list)
 	node_t* nextNode;
 	node_t* removedNode;
 
-	if (list == NULL){
-	    fprintf(stderr,"remover_tail: ponteiro invalido");
+	if (list == NULL)
+    {
+	    fprintf(stderr, "removeHead: Invalid pointer!");
 	    exit(EXIT_FAILURE);
 	}
 
-	if (list->tail == NULL)
+	if (list->tailNode == NULL)
 		return NULL;
 
-	removedNode = list->tail;
+	removedNode = list->headNode;
 
-	if (list->tail == list->tail) {
+	if (list->tailNode == list->headNode) {
 		list->size = 0;
 
-		list->tail = NULL;
-		list->head = NULL;
+		list->tailNode = NULL;
+		list->headNode = NULL;
 
 		return removedNode;
 	}
 
-	nextNode = getNext(list->head);
+	nextNode = getNext(list->headNode);
 	disconnectNode(removedNode);
-	list->head = nextNode;
+	list->headNode = nextNode;
 	disconnectPreviousNode(nextNode);
 	list->size--;
-
 
 	return removedNode;
 }
 
-void* removeNode(linkedList_t *list, node_t* removedNode)
+void* removeNode(linkedList_t* list, node_t* removedNode)
 {
 	node_t* myNode;
 	void* data;
@@ -221,24 +225,24 @@ void* removeNode(linkedList_t *list, node_t* removedNode)
 	node_t* nextNode;
 	node_t* previousNode;
 
-	if (list == NULL || removedNode == NULL){
-		fprintf(stderr,"remover_node: ponteiro invalido");
+	if (list == NULL || removedNode == NULL)
+    {
+		fprintf(stderr, "removeNode: Invalid pointer!");
 		exit(EXIT_FAILURE);
 	}
 
-	//Varre list até encontrar nó
+	// Node list navegation
 	myNode = getHead(list);
-
 	while (myNode)
-        {
+    {
 		data = getData(myNode);
 
-		if (myNode == removeHead)
-            {
+		if (myNode == removedNode)
+        {
 
-			if (myNode == list->head)
+			if (myNode == list->headNode)
 				removeHead(list);
-			else if (myNode == list->tail)
+			else if (myNode == list->tailNode)
 				removeHead(list);
 			else
 			{
