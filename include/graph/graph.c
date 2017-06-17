@@ -379,11 +379,10 @@ void dfs(graph_t* graph, vertex_t* initialVertex)
             {
                 vertex_t* neighborVertex = edgeGetAdjacent(getData(neighborNode));
                 push(neighborList, stack);
-                vertexSetDad(neighborList, vertex);
+                vertexSetDad(neighborVertex, vertex);
                 neighborNode = getNext(neighborNode);
             }
         }
     }
 }
-
 //--------------------------------------------------------------------------------------
