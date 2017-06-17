@@ -138,8 +138,8 @@ node_t* getHead(linkedList_t* list){
 	return list->headNode;
 }
 
-node_t* getTail(linkedList_t* list){
-
+node_t* getTail(linkedList_t* list)
+{
 	if (list == NULL)
     {
 		fprintf(stderr, "getTail: Invalid pointer!");

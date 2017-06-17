@@ -381,3 +381,103 @@ void freeGraph(graph_t* graph)
 	free(graph->vertexList);
 	free(graph);
 }
+
+// Breadth First Search
+void bfs(graph_t* graph, vertex_t* initialVertex)
+{
+    if (graph == NULL)
+    {
+		perror("bfs: Invalid graph pointer!");
+		exit(EXIT_FAILURE);
+	}
+
+    queue_t* queue = createQueue();
+    vertex_t* vertex = NULL;
+
+    node_t* node = getHead(graph->vertexList);
+    while(node)
+    {
+        vertex = getData(node);
+        vertexSetGroup(vertex, INFINITE);
+        vertexSetDad(vertex, NULL);
+
+        node = getNext(node);
+    }
+
+    node = getHead(graph->vertexList);
+
+    vertex = initialVertex;
+    vertexSetGroup(vertex, 0);
+
+    enqueue(vertex, queue);
+    while(!isQueueEmpty(queue))
+    {
+        vertex = dequeue(queue);
+
+        linkedList_t* neighborList = vertexGetEdges(vertex);
+        node_t* neighborNode = getHead(neighborList);
+        while(neighborNode)
+        {
+            vertex_t* neighborVertex = edgeGetAdjacent(getData(neighborNode));
+            int distance = vertexGetGroup(neighborVertex);
+            if(distance == INFINITE)
+            {
+                vertexSetGroup(neighborVertex, vertexGetGroup(vertex)+1);
+                vertexSetDad(neighborVertex, vertex);
+                enqueue(neighborVertex, queue);
+            }
+            neighborNode = getNext(neighborNode);
+        }
+    }
+
+
+}
+
+// Depth First Search
+void dfs(graph_t* graph, vertex_t* initialVertex)
+{
+    if (graph == NULL)
+    {
+		perror("dfs: Invalid graph pointer!");
+		exit(EXIT_FAILURE);
+	}
+
+    stack_t* stack = createStack();
+    vertex_t* vertex = NULL;
+
+    // Vertex list navegation
+    node_t* node = getHead(graph->vertexList);
+    while(node)
+    {
+        vertex = getData(node);
+        vertexSetGroup(vertex, 0); // Set visited by group = 0
+        vertexSetDad(vertex, NULL);
+        node = getNext(node);
+    }
+
+    vertex = initialVertex;
+    push(vertex, stack);
+
+    while(!isStackEmpty(stack))
+    {
+        vertex = pop(stack);
+
+        if(!vertexGetGroup(vertex)){
+            vertexSetGroup(vertex, 1);
+
+            linkedList_t* neighborList = vertexGetEdges(vertex);
+
+            // Navigation in neighborNode list
+            node_t* neighborNode = getHead(neighborList);
+            while(neighborNode)
+            {
+                vertex_t* neighborVertex = edgeGetAdjacent(getData(neighborNode));
+                push(neighborList, stack);
+                vertexSetDad(neighborList, vertex);
+                neighborNode = getNext(neighborNode);
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
