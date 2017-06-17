@@ -16,8 +16,7 @@
 #include "vertex.h"
 #include "../linkedList/linkedList.h"
 
-struct vertexes
-{
+struct vertexes {
 	linkedList_t* edges;
     vertex_t* dadVertex;
     //vertex_t* previousVertex;
@@ -32,7 +31,6 @@ struct edges {
 	vertex_t* destinyVertex;
 	edgeStatus_t status; // Status for file exportation
 };
-
 
 vertex_t* createVertex(int ID)
 {
