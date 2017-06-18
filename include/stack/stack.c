@@ -51,7 +51,7 @@ void push(void* data, stack_t* stack)
     }
 
     #ifdef DEBUG
-    printf("push: %x\n", dado);
+    printf("push: %x\n", vertexGetID(data));
     #endif // DEBUG
 
     node = createNode(data);
@@ -70,13 +70,13 @@ void* pop(stack_t* stack)
         exit(EXIT_FAILURE);
     }
 
-    #ifdef DEBUG
-    printf("pop: %d\n", pilha->data[topo - 1]);
-    #endif
-
     node = removeTail(stack->list);
     data = getData(node);
     free(node);
+
+    #ifdef DEBUG
+    printf("pop: %d\n", vertexGetID(data));
+    #endif
 
     return data;
 }
