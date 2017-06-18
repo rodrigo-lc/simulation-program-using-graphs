@@ -127,8 +127,8 @@ int isListEmpty(linkedList_t* list)
 	return returnValue; // TRUE OR FALSE
 }
 
-node_t* getHead(linkedList_t* list){
-
+node_t* getHead(linkedList_t* list)
+{
 	if (list == NULL)
     {
         fprintf(stderr, "getHead: Invalid pointer!");
@@ -149,7 +149,7 @@ node_t* getTail(linkedList_t* list)
 	return list->tailNode;
 }
 
-node_t* removeTail(linkedList_t *list)
+node_t* removeTail(linkedList_t* list)
 {
 	node_t* previousNode;
 	node_t* removedNode;
@@ -177,7 +177,7 @@ node_t* removeTail(linkedList_t *list)
 	previousNode = getPrevious(list->tailNode);
 	disconnectNode(removedNode);
 	list->tailNode = previousNode;
-	disconnectNode(previousNode);
+	disconnectNextNode(previousNode);
 	list->size--;
 
 	return removedNode;
