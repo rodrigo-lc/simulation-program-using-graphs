@@ -29,10 +29,7 @@ int main(void)
 	//exportGraphDot("graph.dot", graph);
     list = buildGraph(graph, "graphTest.dot");
 
-
 	freeGraph(graph);
-
-
 
 	return EXIT_SUCCESS;
 }
