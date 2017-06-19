@@ -33,9 +33,12 @@ void addAdjacents(graph_t* graph, vertex_t *vertex, int n, ...);
 vertex_t* searchVertex(graph_t* graph, int ID);
 void exportGraphDot(const char* filename, graph_t* graph);
 void freeGraph(graph_t* graph);
+void dfs(graph_t* graph, vertex_t* initial);
+linkedList_t* loopSearch(graph_t* graph, vertex_t* initialVertex);
+
 
 //stack_t* Dijkstra(graph_t* graph, vertex_t* sourceVertex, vertex_t* destinyVertex); // Minimum path
-void bfs(graph_t* graph, vertex_t* initialVertex); // IMPLEMENTAR
-void dfs(graph_t* graph, vertex_t* initialVertex); // IMPLEMENTAR
+//void bfs(graph_t* graph, vertex_t* initialVertex); // IMPLEMENTAR
+//void dfs(graph_t* graph, vertex_t* initialVertex); // IMPLEMENTAR
 
 #endif /* GRAPH_H_ */

@@ -16,21 +16,27 @@
 #include "vertex.h"
 #include "../linkedList/linkedList.h"
 
-struct vertexes {
+#define DEBUG
+
+struct vertexes
+{
 	linkedList_t* edges;
     vertex_t* dadVertex;
     //vertex_t* previousVertex;
 	int ID;
 	int groupID;
     int distance;
+    int visited;
 };
 
 struct edges {
 	int weight;
 	vertex_t* sourceVertex;
 	vertex_t* destinyVertex;
-	edgeStatus_t status; // Status for file exportation
+	edgeStatus_t status;    // Status for file exportation
+	int used;               // temp name | Remember to initialize as 0
 };
+
 
 vertex_t* createVertex(int ID)
 {
@@ -126,6 +132,17 @@ vertex_t* edgeGetAdjacent(edges_t* edge)
 	return edge->destinyVertex;
 }
 
+vertex_t* edgeGetSource(edges_t* edge)
+{
+    if (edge == NULL)
+    {
+		fprintf(stderr, "edgeGetSource: Invalid edge!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return edge->sourceVertex;
+}
+
 edges_t* searchAdjacent(vertex_t* vertex, vertex_t* adjacentVertex)
 {
 	node_t* node;
@@ -207,6 +224,17 @@ void vertexSetDad(vertex_t* vertex, vertex_t* dadVertex)
 	vertex->dadVertex = dadVertex;
 }
 
+vertex_t* vertexGetDad(vertex_t* vertex)
+{
+    if (vertex == NULL)
+    {
+			fprintf(stderr, "vertexGetDad: Invalid vertex!\n");
+			exit(EXIT_FAILURE);
+	}
+
+	return vertex->dadVertex;
+}
+
 void printVertex(vertex_t* vertex)
 {
     if (vertex == NULL)
@@ -215,6 +243,140 @@ void printVertex(vertex_t* vertex)
 			exit(EXIT_FAILURE);
 	}
 	printf("Pointer: %p\nID: %d\n", vertex, vertex->ID);
+}
+
+void vertexSetVisited(vertex_t* vertex, int x)
+{
+
+    if (vertex == NULL){
+		fprintf(stderr, "vertexSetVisited: invalid vertex\n");
+		exit(EXIT_FAILURE);
+	}
+
+    vertex->visited = x;
+}
+
+int vertexGetVisited(vertex_t* vertex){
+
+    if (vertex == NULL){
+		fprintf(stderr, "vertexGetVisited: invalid Vertex\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return vertex->visited;
+}
+
+void printNeighborsList(vertex_t* vertex)
+{
+    if (vertex == NULL)
+    {
+		fprintf(stderr, "printNeighborsList: Invalid vertex!");
+		exit(EXIT_FAILURE);
+	}
+	printList(vertex->edges);
+}
+
+edges_t* counterEdge(edges_t* edge)
+{
+    if (edge == NULL)
+    {
+		fprintf(stderr, "counterEdge: Invalid edge!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	vertex_t* sourceVertex = edge->sourceVertex;
+	vertex_t* destinyVertex = edge->destinyVertex;
+
+	node_t* node = getHead(destinyVertex->edges);
+
+	while (node)
+    {
+        edge = getData(node);
+
+        if (edge->destinyVertex == sourceVertex)
+            return edge;
+
+        node = getNext(node);
+    }
+    return edge;
+}
+
+void createLoop(linkedList_t* loopsList, linkedList_t* visitedList, edges_t* edge)
+{
+    if (loopsList == NULL)
+    {
+		fprintf(stderr, "createLoop: Invalid loopsList pointer!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (visitedList == NULL)
+    {
+		fprintf(stderr, "createLoop: Invalid visitedList pointer!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (edge == NULL)
+    {
+		fprintf(stderr, "createLoop: Invalid edge pointer!\n");
+		exit(EXIT_FAILURE);
+	}
+
+    linkedList_t* list = createLinkedList();
+    node_t* node = createNode(list);
+    addTail(loopsList, node);           //create a new loop list
+
+    vertex_t* visitedVertex = NULL;
+    vertex_t* loopVertex = edge->destinyVertex;
+    vertex_t* vertex = edge->sourceVertex;
+    node_t* visitedNode = getTail(visitedList);
+
+    node = createNode(edge);
+    addTail(list, node);                //add first edge to the list
+
+    #ifdef DEBUG
+    int i = listGetSize(loopsList);
+    printf("Loop %d:\n", i);
+    printf("\tEdge: %d - %d\n", edge->destinyVertex->ID, edge->sourceVertex->ID);
+    #endif // DEBUG
+
+	while (vertex != loopVertex)        //search on visitedList for the edges forming the loop
+	{
+        edge = getData(visitedNode);
+        visitedVertex = edge->destinyVertex;
+	    if(vertex == visitedVertex)
+	    {
+            node = createNode(edge);
+            addTail(list, node);
+            vertex = edge->sourceVertex;
+
+            #ifdef DEBUG
+            printf("\tEdge: %d - %d\n", edge->destinyVertex->ID, edge->sourceVertex->ID);
+            #endif // DEBUG
+        }
+		visitedNode = getPrevious(visitedNode);
+	}
+}
+
+int isEdgeUsed(edges_t* edge)
+{
+    if (edge == NULL)
+    {
+		fprintf(stderr, "isEdgeUsed: Invalid edge pointer!\n");
+		exit(EXIT_FAILURE);
+	}
+
+    return edge->used;
+}
+
+void setUsedEdge(edges_t* edge, int i)
+{
+    if (edge == NULL)
+    {
+		fprintf(stderr, "setUsedEdge: Invalid edge pointer!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	edge->used = i;
 }
 
 //void vertexSetDistance(vertex_t* vertex, int distance) {

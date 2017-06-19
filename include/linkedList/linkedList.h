@@ -19,9 +19,11 @@ typedef struct linkedLists linkedList_t;
 
 linkedList_t* createLinkedList(void);
 node_t* getHead(linkedList_t* list);
+node_t* getTail(linkedList_t* list);
 node_t* removeTail(linkedList_t* list);
 node_t* removeHead(linkedList_t* list);
 int isListEmpty(linkedList_t* list);
+int listGetSize(linkedList_t* list);
 void addTail(linkedList_t* list, node_t* node);
 void printList(linkedList_t* list);
 void printInvertedList(linkedList_t* list);

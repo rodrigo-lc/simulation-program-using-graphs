@@ -260,3 +260,13 @@ void* removeNode(linkedList_t* list, node_t* removedNode)
 	return data;
 }
 
+int listGetSize(linkedList_t* list)
+{
+    if (list == NULL)
+    {
+		fprintf(stderr, "listGetSize: Invalid pointer!");
+		exit(EXIT_FAILURE);
+	}
+
+	return list->size;
+}

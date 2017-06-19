@@ -39,100 +39,6 @@ struct graphs {
 
 //--------------------------------------------------------------------------------------
 
-void bfs(graph_t *graph, vertex_t* inicial)
-{
-    if (grafo == NULL) {
-		perror("bfs: grafo invalido");
-		exit(EXIT_FAILURE);
-	}
-
-    fila_t *fila = cria_fila();
-    vertice_t *vertice = NULL;
-
-    no_t *no = obter_cabeca(grafo->vertices);
-    while(no)
-    {
-        vertice = obter_dado(no);
-        vertice_set_dist(vertice, INFINITO);
-        vertice_set_pai(vertice, NULL);
-
-        no = obtem_proximo(no);
-    }
-
-    no = obter_cabeca(grafo->vertices);
-
-
-    vertice = inicial;
-    vertice_set_dist(vertice, 0);
-
-    enqueue(vertice, fila);
-    while(!fila_vazia(fila))
-    {
-        vertice = dequeue(fila);
-
-        lista_enc_t *vizinhos = vertice_get_arestas(vertice);
-        no_t *no_vizinho = obter_cabeca(vizinhos);
-        while(no_vizinho)
-        {
-            vertice_t *vizinho = aresta_get_adjacente(obter_dado(no_vizinho));
-            int dist = vertice_get_dist(vizinho);
-            if(dist == INFINITO)
-            {
-                vertice_set_dist(vizinho,vertice_get_dist(vertice)+1);
-                vertice_set_pai(vizinho, vertice);
-                enqueue(vizinho, fila);
-            }
-            no_vizinho = obtem_proximo(no_vizinho);
-        }
-    }
-
-
-}
-
-
-void dfs(grafo_t *grafo, vertice_t* inicial)
-{
-    if (grafo == NULL) {
-		perror("dfs: grafo invalido");
-		exit(EXIT_FAILURE);
-	}
-
-    pilha_t *pilha = cria_pilha();
-    vertice_t *vertice = NULL;
-
-    no_t *no = obter_cabeca(grafo->vertices);
-    while(no)
-    {
-        vertice = obter_dado(no);
-        vertice_set_visitado(vertice, 0);
-        vertice_set_pai(vertice, NULL);
-        no = obtem_proximo(no);
-    }
-
-    vertice = inicial;
-    push(vertice, pilha);
-    while(!pilha_vazia(pilha))
-    {
-        vertice = pop(pilha);
-
-        if(!vertice_get_visitado(vertice)){
-            vertice_set_visitado(vertice, 1);
-
-            lista_enc_t *vizinhos = vertice_get_arestas(vertice);
-            no_t *no_vizinho = obter_cabeca(vizinhos);
-            while(no_vizinho)
-            {
-                vertice_t *vizinho = aresta_get_adjacente(obter_dado(no_vizinho));
-                push(vizinho, pilha);
-                vertice_set_pai(vizinho, vertice);
-                no_vizinho = obtem_proximo(no_vizinho);
-            }
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------
-
 graph_t* createGraph(int ID)
 {
 	graph_t* graph = NULL;
@@ -472,12 +378,79 @@ void dfs(graph_t* graph, vertex_t* initialVertex)
             while(neighborNode)
             {
                 vertex_t* neighborVertex = edgeGetAdjacent(getData(neighborNode));
-                push(neighborList, stack);
-                vertexSetDad(neighborList, vertex);
+                push(neighborVertex, stack);
+                vertexSetDad(neighborVertex, vertex);
                 neighborNode = getNext(neighborNode);
             }
         }
     }
 }
+
+linkedList_t* loopSearch(graph_t* graph, vertex_t* initialVertex)
+{
+    if (graph == NULL)
+    {
+		perror("loopSearch: Invalid graph pointer!");
+		exit(EXIT_FAILURE);
+	}
+
+    stack_t* stack = createStack();
+    vertex_t* vertex = NULL;
+    linkedList_t* visitedList = createLinkedList();
+    linkedList_t* loopsList = createLinkedList();
+    edges_t* edge = NULL;
+    edges_t* initialEdge = NULL;
+
+    // Vertex list navegation
+    node_t* node = getHead(graph->vertexList);
+    while(node)
+    {
+        vertex = getData(node);
+        vertexSetGroup(vertex, 0); // Set visited by group = 0
+        vertexSetDad(vertex, NULL);
+        node = getNext(node);
+    }
+
+    vertex = initialVertex;
+    initialEdge = createEdge(vertex, vertex, 0);     //need to free later
+    push(initialEdge, stack);
+
+    while(!isStackEmpty(stack))
+    {
+        edge = pop(stack);
+        vertex = edgeGetAdjacent(edge);
+
+        if(!vertexGetGroup(vertex))
+        {
+            vertexSetGroup(vertex, 1);
+
+            node = createNode(edge);
+            addTail(visitedList, node);
+
+            linkedList_t* neighborList = vertexGetEdges(vertex);
+
+            // Navigation in neighborNode list
+            node_t* neighborNode = getHead(neighborList);
+            while(neighborNode)
+            {
+                edge = getData(neighborNode);
+                vertex_t* neighborVertex = edgeGetAdjacent(edge);
+                if(neighborVertex != vertexGetDad(vertex))
+                    push(edge, stack);
+                vertexSetDad(neighborVertex, vertex);
+                neighborNode = getNext(neighborNode);
+            }
+        }
+        else if(!isEdgeUsed(edge) && !isEdgeUsed(counterEdge(edge)))
+        {
+            createLoop(loopsList, visitedList, edge);
+            setUsedEdge(edge, 1);
+            setUsedEdge(counterEdge(edge), 1);
+        }
+    }
+
+    return loopsList;
+}
+
 
 //--------------------------------------------------------------------------------------
