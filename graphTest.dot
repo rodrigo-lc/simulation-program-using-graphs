@@ -1,0 +1,4 @@
+graph {
+1--6 [color=red, label=14];
+1--2 [color=blue, label=7];
+}

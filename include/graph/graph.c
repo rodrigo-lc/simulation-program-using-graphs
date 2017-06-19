@@ -4,7 +4,7 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        05/07/2016
  Version:           1.0
- Last modification: 16/06/2017
+ Last modification: 19/06/2017
  Copyright:         MIT License
  Description:       Graphs using data structures such as: linked lists, stacks and
                     queues
@@ -30,14 +30,12 @@
 #define FALSE       0
 #define TRUE        1
 #define INFINITE    INT_MAX
-
+#define BUFFER_SIZE 100
 
 struct graphs {
 	int ID;
 	linkedList_t* vertexList;
 };
-
-//--------------------------------------------------------------------------------------
 
 graph_t* createGraph(int ID)
 {
@@ -102,7 +100,6 @@ vertex_t* searchVertex(graph_t* graph, int ID)
 		return FALSE;
 
 	nodeList = getHead(graph->vertexList);
-
 	while (nodeList)
 	{
 		// Get list address
@@ -385,4 +382,68 @@ void dfs(graph_t* graph, vertex_t* initialVertex)
         }
     }
 }
+
+linkedList_t* buildGraph (graph_t* graph, char* filename)
+{
+    char buffer[BUFFER_SIZE];
+	char componentName[BUFFER_SIZE];
+	float value = 0; // resistance or voltage
+	int returnValue = 0; // return value for sscanf
+	int sourceID, destinyID;
+	vertex_t* sourceVertex;
+	vertex_t* destinyVertex;
+
+
+    linkedList_t* vertexList;
+    FILE* file;
+
+	file = fopen(filename, "r");
+
+	if (file == NULL)
+    {
+		perror("buildGraph: Invalid file pointer!");
+		exit(EXIT_FAILURE);
+	}
+
+	vertexList = createLinkedList();
+
+	fgets(buffer, BUFFER_SIZE, file);
+
+    while(fgets(buffer, BUFFER_SIZE, file) != 0)
+    {
+        if(buffer[0] == '}')
+            break;
+
+		returnValue = sscanf(buffer, "%i--%i [color=%[^,], label=%f];\n", &sourceID, &destinyID, componentName, &value);
+
+        printf("\nreturn: %i\nsource: %i\ndestiny: %i\ncomponentname: %s\nvalue: %.2f\n\n", returnValue,  sourceID, destinyID, componentName, value);
+
+
+        if (returnValue != 4)
+        {
+			fprintf(stderr, "Invalid file!\n");
+			exit(EXIT_FAILURE);
+		}
+
+        sourceVertex = searchVertex(graph, sourceID);
+        if(!sourceVertex)
+        {
+            sourceVertex = createVertex(sourceID);
+            node_t* node = createNode(sourceVertex);
+            addTail(vertexList, node);
+        }
+        destinyVertex = searchVertex(graph, destinyID);
+        if(!destinyVertex)
+        {
+            destinyVertex = createVertex(destinyID);
+            node_t* node = createNode(destinyVertex);
+            addTail(vertexList, node);
+        }
+    }
+	/* Fecha arquivo */
+	fclose(file);
+
+	return vertexList;
+}
+
 //--------------------------------------------------------------------------------------

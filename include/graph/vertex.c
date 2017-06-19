@@ -27,6 +27,7 @@ struct vertexes {
 
 struct edges {
 	int weight;
+	int value;
 	vertex_t* sourceVertex;
 	vertex_t* destinyVertex;
 	edgeStatus_t status; // Status for file exportation
