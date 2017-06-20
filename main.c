@@ -4,7 +4,7 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        16/06/2017
  Version:           1.0
- Last modification: 16/06/2017
+ Last modification: 20/06/2017
  Copyright:         MIT License
  Description :      Simulation Program Using Graphs
  =============================================================================
@@ -16,84 +16,32 @@
 #include "include/stack/stack.h"
 #include "include/queue/queue.h"
 #include "include/graph/graph.h"
+#include "include/linkedList/linkedList.h"
 
-#define DEBUG
+//#define DEBUG
 
 int main(void)
 {
 	graph_t*    graph;
 	vertex_t*   vertex;
-	queue_t*    queue;
-	int ID, i;
+	stack_t* list;
+	int i;
 
 	graph = createGraph(0);
-	queue = createQueue();
 
-	//Adiciona todos os vertexs node graph
-	for(i=1; i<14; i++)
-    {
-        vertex = graphAddVertex(graph, i);
-        enqueue(vertex, queue);
+	// exportGraphDot("graph.dot", graph);
 
-        #ifdef DEBUG
-        printVertex(vertex);
-        #endif
-    }
+    list = buildGraph(graph, "graphTest.dot");
 
-    // constrói graph
-	while (!isQueueEmpty(queue))
-    {
-		vertex = dequeue(queue);
-        ID = vertexGetID(vertex);
+    vertex = searchVertex(graph, 6);
+    linkedList_t* loopsList = loopSearch(graph, vertex);
+    i = listGetSize(loopsList);
+    printf("\nSize = %i",i);
 
-		switch(ID){
-			case 1:
-				addAdjacents(graph, vertex, 6, 6, 14, 2, 7, 3, 9);
-				break;
-			case 2:
-				addAdjacents(graph, vertex, 6, 1, 7, 3, 10, 4, 15);
-				break;
-			case 3:
-				addAdjacents(graph, vertex, 8, 6, 2, 1, 9, 2, 10, 4, 11);
-				break;
-			case 4:
-				addAdjacents(graph, vertex, 6, 5, 6, 3, 11, 2, 15);
-				break;
-			case 5:
-				addAdjacents(graph, vertex, 4, 6, 9, 4, 6);
-				break;
-			case 6:
-				addAdjacents(graph, vertex, 6, 1, 14, 3, 2, 5, 9);
-				break;
-			case 7:
-				addAdjacents(graph, vertex, 2, 8, 9);
-				break;
-			case 8:
-				addAdjacents(graph, vertex, 4, 7, 9, 9, 4);
-				break;
-			case 9:
-				addAdjacents(graph, vertex, 2, 8, 4);
-				break;
-			case 10:
-				addAdjacents(graph, vertex, 4, 11, 1, 12, 8);
-				break;
-			case 11:
-				addAdjacents(graph, vertex, 4, 10, 1, 12, 4);
-				break;
-			case 12:
-				addAdjacents(graph, vertex, 4, 11, 4, 10, 8);
-				break;
-			default:
-				break;
-		}
-    }
 
-	exportGraphDot("graph.dot", graph);
-
-	freeQueue(queue);
+    // implementar freeLinkedList
 	freeGraph(graph);
 
-
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
