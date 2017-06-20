@@ -30,7 +30,7 @@ linkedList_t* vertexGetEdges(vertex_t* vertex);
 vertex_t* edgeGetAdjacent(edges_t* edge);
 vertex_t* edgeGetSource(edges_t* edge);
 vertex_t* vertexGetDad(vertex_t* vertex);
-edges_t* createEdge(vertex_t* sourceVertex, vertex_t* destinyVertex, int weight);
+edges_t* createEdge(vertex_t* sourceVertex, vertex_t* destinyVertex, void* data);
 void addEdge(vertex_t *vertex, edges_t* edge);
 int edgeGetWeight (edges_t* edge);
 edges_t* searchAdjacent(vertex_t* vertex, vertex_t* adjacentVertex);
@@ -43,6 +43,7 @@ void createLoop(linkedList_t* loopsList, linkedList_t* visitedList, edges_t* edg
 int isEdgeUsed(edges_t* edge);
 void setUsedEdge(edges_t* edge, int i);
 edges_t* counterEdge(edges_t* edge);
+void printEdge(edges_t* edge);
 
 //void vertexSetDistance(vertex_t *vertex, int distance);
 //int vertexGetDistance(vertex_t* vertex);

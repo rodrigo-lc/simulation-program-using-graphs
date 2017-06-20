@@ -4,7 +4,7 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        05/07/2016
  Version:           1.0
- Last modification: 16/06/2017
+ Last modification: 20/06/2017
  Copyright:         MIT License
  Description:       Vertex structures for using in applications using graphs
  ==============================================================================
@@ -34,7 +34,8 @@ struct edges {
 	vertex_t* sourceVertex;
 	vertex_t* destinyVertex;
 	edgeStatus_t status;    // Status for file exportation
-	int used;               // temp name | Remember to initialize as 0
+	void* data;             
+	int used;
 };
 
 
@@ -68,7 +69,7 @@ int vertexGetID(vertex_t* vertex)
 	return vertex->ID;
 }
 
-edges_t* createEdge(vertex_t* source, vertex_t* vertex, int weight)
+edges_t* createEdge(vertex_t* source, vertex_t* vertex, void* data)
 {
 	edges_t* edge;
 
@@ -79,9 +80,10 @@ edges_t* createEdge(vertex_t* source, vertex_t* vertex, int weight)
 		exit(EXIT_FAILURE);
 	}
 
-	edge->weight = weight;
+	edge->data = data;
 	edge->sourceVertex = source;
 	edge->destinyVertex = vertex;
+    edge->used = 0;
 
 	return edge;
 }
@@ -98,6 +100,9 @@ void addEdge(vertex_t* vertex, edges_t* edge)
 	node = createNode(edge);
 	addTail(vertex->edges, node);
 
+	#ifdef DEBUG
+	printf("addEdge: %d - %d to Vertex %d\n", edge->sourceVertex->ID, edge->destinyVertex->ID, vertex->ID);
+	#endif // DEBUG
 }
 
 linkedList_t* vertexGetEdges(vertex_t *vertex)
@@ -377,6 +382,11 @@ void setUsedEdge(edges_t* edge, int i)
 	}
 
 	edge->used = i;
+}
+
+void printEdge(edges_t* edge)
+{
+    printf("edge: %d - %d\n", edge->sourceVertex->ID, edge->destinyVertex->ID);
 }
 
 //void vertexSetDistance(vertex_t* vertex, int distance) {

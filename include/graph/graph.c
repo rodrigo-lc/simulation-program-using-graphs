@@ -4,7 +4,7 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        05/07/2016
  Version:           1.0
- Last modification: 16/06/2017
+ Last modification: 20/06/2017
  Copyright:         MIT License
  Description:       Graphs using data structures such as: linked lists, stacks and
                     queues
@@ -24,6 +24,7 @@
 #include "../../include/linkedList/node.h"
 #include "../../include/queue/queue.h"
 #include "../../include/stack/stack.h"
+#include "../component/component.h"
 
 // Defines
 //#define DEBUG
@@ -99,7 +100,7 @@ vertex_t* searchVertex(graph_t* graph, int ID)
 	}
 
 	if (isListEmpty(graph->vertexList) == TRUE)
-		return FALSE;
+		return NULL;
 
 	nodeList = getHead(graph->vertexList);
 
@@ -119,46 +120,6 @@ vertex_t* searchVertex(graph_t* graph, int ID)
 		nodeList = getNext(nodeList);
 	}
 	return NULL;
-}
-
-void addAdjacents(graph_t* graph, vertex_t* vertex, int n, ...)
-{
-	va_list arguments;
-	vertex_t* nextVertex;
-	edges_t* edge;
-
-	int nextID;
-	int weight;
-    int i;
-
-	// Initializing arguments to store all values after num
-	va_start (arguments, n);
-
-	for (i = 0; i < n; (i = (i + 2)))
-	{
-		nextID = va_arg(arguments, int);
-		weight = va_arg(arguments, int);
-
-		nextVertex = searchVertex(graph, nextID);
-
-		if (nextVertex == NULL)
-        {
-			fprintf(stderr, "addAdjacents: Cannot find next vertex in graph\n");
-			exit(EXIT_FAILURE);
-		}
-
-		edge = createEdge(vertex, nextVertex, weight);
-		addEdge(vertex, edge);
-
-#ifdef DEBUG
-		printf("\tVertexID: %d\n", vertexGetID(vertex));
-		printf("\tNext: %d\n", nextID);
-		printf("\tWeight: %d\n", weight);
-#endif
-
-	} // end for
-
-	va_end (arguments);
 }
 
 void exportGraphDot(const char* filename, graph_t* graph)
@@ -451,6 +412,84 @@ linkedList_t* loopSearch(graph_t* graph, vertex_t* initialVertex)
 
     return loopsList;
 }
+
+linkedList_t* buildGraph(graph_t* graph, char* filename)
+{
+    char buffer[BUFFER_SIZE];
+	char componentName[BUFFER_SIZE];
+	float value = 0; // resistance or voltage
+	int returnValue = 0; // return value for sscanf
+	int sourceID, destinyID;
+	vertex_t* sourceVertex;
+	vertex_t* destinyVertex;
+
+    linkedList_t* vertexList;
+    FILE* file;
+
+	file = fopen(filename, "r");
+
+	if (file == NULL)
+    {
+		perror("buildGraph: Invalid file pointer!");
+		exit(EXIT_FAILURE);
+	}
+
+	vertexList = createLinkedList();
+    graph->vertexList = vertexList;
+
+	fgets(buffer, BUFFER_SIZE, file);
+
+    while(fgets(buffer, BUFFER_SIZE, file) != 0)
+    {
+        if(buffer[0] == '}')
+            break;
+
+		returnValue = sscanf(buffer, "%i--%i [color=%[^,], label=%f];\n", &sourceID, &destinyID, componentName, &value);
+
+        printf("\nreturn: %i\nsource: %i\ndestiny: %i\ncomponentname: %s\nvalue: %.2f\n", returnValue,  sourceID, destinyID, componentName, value);
+
+        if (returnValue != 4)
+        {
+			fprintf(stderr, "Invalid file!\n");
+			exit(EXIT_FAILURE);
+		}
+
+        sourceVertex = searchVertex(graph, sourceID);
+        if(sourceVertex == NULL)                            //if new vertex, add to vertexList
+        {
+            sourceVertex = createVertex(sourceID);
+            node_t* node = createNode(sourceVertex);
+            addTail(vertexList, node);
+        }
+
+        destinyVertex = searchVertex(graph, destinyID);
+        if(destinyVertex == NULL)
+        {
+            destinyVertex = createVertex(destinyID);
+            node_t* node = createNode(destinyVertex);
+            addTail(vertexList, node);
+        }
+
+        component_t* component = createComponent(componentName, value);
+        edges_t* edge = createEdge(sourceVertex, destinyVertex, component);
+        addEdge(sourceVertex, edge);
+
+        component = createComponent(componentName, -value);
+        edge = createEdge(destinyVertex, sourceVertex, component);
+        addEdge(destinyVertex, edge);
+    }
+
+    // add ADJACENTS
+
+
+
+    //
+	/* Fecha arquivo */
+	fclose(file);
+
+	return vertexList;
+}
+
 
 
 //--------------------------------------------------------------------------------------

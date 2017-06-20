@@ -17,6 +17,8 @@
 #include "vertex.h"
 #include "../stack/stack.h"
 
+#define BUFFER_SIZE 100
+
 typedef struct graphs graph_t;
 
 graph_t* createGraph(int ID);
@@ -35,7 +37,7 @@ void exportGraphDot(const char* filename, graph_t* graph);
 void freeGraph(graph_t* graph);
 void dfs(graph_t* graph, vertex_t* initial);
 linkedList_t* loopSearch(graph_t* graph, vertex_t* initialVertex);
-
+linkedList_t* buildGraph (graph_t* graph, char* filename);
 
 //stack_t* Dijkstra(graph_t* graph, vertex_t* sourceVertex, vertex_t* destinyVertex); // Minimum path
 //void bfs(graph_t* graph, vertex_t* initialVertex); // IMPLEMENTAR
