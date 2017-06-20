@@ -14,9 +14,15 @@
 #ifndef COMPONENT_H_INCLUDED
 #define COMPONENT_H_INCLUDED
 
+typedef struct components component_t;
 typedef struct resistors resistor_t;
 typedef struct voltageSources voltageSource_t;
 
-
+float componentGetValue(component_t* component);
+void componentSetValue(component_t* component, float value);
+float componentGetCurrent(component_t* component);
+int componentGetType(component_t* component);
+float componentGetVoltage(component_t* component);
+component_t* createComponent(char* edgeColor, float value);
 
 #endif // COMPONENT_H_INCLUDED
