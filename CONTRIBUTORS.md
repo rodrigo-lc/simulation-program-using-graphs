@@ -4,4 +4,4 @@ Responsável pelo algoritmo para detecção de componentes cíclicos e escalonam
 
 # Rodrigo Luiz da Costa
 Estudante de Engenharia Eletrônica
-Responsável pela implementação do padrão de código, testes para busca em largura, componente.c/h e funções de entrada e saída de arquivos.
+Responsável pela implementação do padrão de código, algoritmo de busca em largura, component.c/h e funções de entrada e saída de arquivos.
