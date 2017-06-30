@@ -43,6 +43,6 @@ graph { node[shape=point] rankdir=LR
 }
 "
 
-## 
+## Don't forget to break the lines when copying. 
 Feel free to give suggestions.
 Thank you for the attention!
