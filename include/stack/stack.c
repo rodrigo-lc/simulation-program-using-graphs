@@ -75,7 +75,7 @@ void* pop(stack_t* stack)
     free(node);
 
     #ifdef DEBUG
-    printf("pop: %d\n", vertexGetID(data));
+    printf("pop: %x\n", vertexGetID(data));
     #endif
 
     return data;

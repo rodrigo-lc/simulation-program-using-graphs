@@ -37,7 +37,7 @@ void exportGraphDot(const char* filename, graph_t* graph);
 void freeGraph(graph_t* graph);
 void dfs(graph_t* graph, vertex_t* initial);
 linkedList_t* loopSearch(graph_t* graph, vertex_t* initialVertex);
-linkedList_t* buildGraph (graph_t* graph, char* filename);
+linkedList_t* buildGraph(graph_t* graph, char* filename);
 
 //stack_t* Dijkstra(graph_t* graph, vertex_t* sourceVertex, vertex_t* destinyVertex); // Minimum path
 //void bfs(graph_t* graph, vertex_t* initialVertex); // IMPLEMENTAR

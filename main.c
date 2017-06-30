@@ -17,6 +17,7 @@
 #include "include/queue/queue.h"
 #include "include/graph/graph.h"
 #include "include/linkedList/linkedList.h"
+#include "include/component/component.h"
 
 //#define DEBUG
 
@@ -24,20 +25,19 @@ int main(void)
 {
 	graph_t*    graph;
 	vertex_t*   vertex;
-	stack_t* list;
-	int i;
 
 	graph = createGraph(0);
 
 	// exportGraphDot("graph.dot", graph);
 
-    list = buildGraph(graph, "graphTest.dot");
+    linkedList_t* componentsList = buildGraph(graph, "new 1.dot");
 
     vertex = searchVertex(graph, 6);
     linkedList_t* loopsList = loopSearch(graph, vertex);
-    i = listGetSize(loopsList);
-    printf("\nSize = %i",i);
 
+    printLoops(loopsList);
+    calculateCircuit(loopsList, componentsList);
+    //printResults(componentsList);
 
     // implementar freeLinkedList
 	freeGraph(graph);

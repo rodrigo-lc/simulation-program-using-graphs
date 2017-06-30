@@ -1,0 +1,10 @@
+graph { node[shape=circle] rankdir=LR
+1--2 [color=blue, label=10];
+2--3 [color=red, label=4];
+3--4 [color=black, label=0];
+3--1 [color=red, label=4];
+4--5 [color=black, label=0];
+4--1 [color=red, label=4];
+5--6 [color=red, label=0.5];
+6--1 [color=red, label=1.5];
+}

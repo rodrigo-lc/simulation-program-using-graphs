@@ -205,6 +205,7 @@ void freeGraph(graph_t* graph)
 	vertex_t* vertex;
 	edges_t* edge;
 	linkedList_t* edgeList;
+    component_t* component;
 
 	if (graph == NULL)
     {
@@ -224,9 +225,11 @@ void freeGraph(graph_t* graph)
 		while (edgeNode)
         {
 			edge = getData(edgeNode);
+            component = edgeGetData(edge);
 
 			// Free edge
 			free(edge);
+            free(component);
 
 			// Free list node
 			freeNode = edgeNode;
@@ -415,6 +418,7 @@ linkedList_t* loopSearch(graph_t* graph, vertex_t* initialVertex)
 
 linkedList_t* buildGraph(graph_t* graph, char* filename)
 {
+    linkedList_t* componentsList = createLinkedList();
     char buffer[BUFFER_SIZE];
 	char componentName[BUFFER_SIZE];
 	float value = 0; // resistance or voltage
@@ -446,7 +450,9 @@ linkedList_t* buildGraph(graph_t* graph, char* filename)
 
 		returnValue = sscanf(buffer, "%i--%i [color=%[^,], label=%f];\n", &sourceID, &destinyID, componentName, &value);
 
+        #ifdef DEBUG
         printf("\nreturn: %i\nsource: %i\ndestiny: %i\ncomponentname: %s\nvalue: %.2f\n", returnValue,  sourceID, destinyID, componentName, value);
+        #endif // DEBUG
 
         if (returnValue != 4)
         {
@@ -470,24 +476,21 @@ linkedList_t* buildGraph(graph_t* graph, char* filename)
             addTail(vertexList, node);
         }
 
-        component_t* component = createComponent(componentName, value);
+        component_t* component = createComponent(componentName, value, sourceID, destinyID);
         edges_t* edge = createEdge(sourceVertex, destinyVertex, component);
         addEdge(sourceVertex, edge);
+        node_t* node = createNode(component);
+        addTail(componentsList, node);
 
-        component = createComponent(componentName, -value);
+        component = createComponent(componentName, value, destinyID, sourceID);
         edge = createEdge(destinyVertex, sourceVertex, component);
         addEdge(destinyVertex, edge);
     }
 
     // add ADJACENTS
-
-
-
-    //
 	/* Fecha arquivo */
 	fclose(file);
-
-	return vertexList;
+	return componentsList;
 }
 
 

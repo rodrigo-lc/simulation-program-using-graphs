@@ -4,7 +4,7 @@
  Contributors:      Renan Augusto Starke, Caio Felipe Campoy, Rodrigo Luiz da Costa
  Created on:        05/07/2016
  Version:           1.0
- Last modification: 20/06/2017
+ Last modification: 16/06/2017
  Copyright:         MIT License
  Description:       Vertex structures for using in applications using graphs
  ==============================================================================
@@ -16,7 +16,7 @@
 #include "vertex.h"
 #include "../linkedList/linkedList.h"
 
-#define DEBUG
+//#define DEBUG
 
 struct vertexes
 {
@@ -34,7 +34,7 @@ struct edges {
 	vertex_t* sourceVertex;
 	vertex_t* destinyVertex;
 	edgeStatus_t status;    // Status for file exportation
-	void* data;             
+	void* data;             // temp name | Remember to initialize as 0
 	int used;
 };
 
@@ -306,6 +306,17 @@ edges_t* counterEdge(edges_t* edge)
     return edge;
 }
 
+void* edgeGetData(edges_t* edge)
+{
+    if (edge == NULL)
+    {
+		fprintf(stderr, "edgeGetData: Invalid pointer!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return edge->data;
+}
+
 void createLoop(linkedList_t* loopsList, linkedList_t* visitedList, edges_t* edge)
 {
     if (loopsList == NULL)
@@ -341,7 +352,7 @@ void createLoop(linkedList_t* loopsList, linkedList_t* visitedList, edges_t* edg
     #ifdef DEBUG
     int i = listGetSize(loopsList);
     printf("Loop %d:\n", i);
-    printf("\tEdge: %d - %d\n", edge->destinyVertex->ID, edge->sourceVertex->ID);
+    printf("\tEdge: %d - %d\n", edge->sourceVertex->ID, edge->destinyVertex->ID);
     #endif // DEBUG
 
 	while (vertex != loopVertex)        //search on visitedList for the edges forming the loop
@@ -355,11 +366,49 @@ void createLoop(linkedList_t* loopsList, linkedList_t* visitedList, edges_t* edg
             vertex = edge->sourceVertex;
 
             #ifdef DEBUG
-            printf("\tEdge: %d - %d\n", edge->destinyVertex->ID, edge->sourceVertex->ID);
+            printf("\tEdge: %d - %d\n", edge->sourceVertex->ID, edge->destinyVertex->ID);
             #endif // DEBUG
         }
 		visitedNode = getPrevious(visitedNode);
 	}
+}
+
+void printLoops(linkedList_t* loopsList)
+{
+    if (loopsList == NULL)
+    {
+		fprintf(stderr, "printLoops: Invalid loopsList pointer!\n");
+		exit(EXIT_FAILURE);
+	}
+
+	node_t* node = getHead(loopsList);
+	linkedList_t* loopList;
+	int i = 1;
+
+    printf("SIMULATION-PROGRAM-USING-GRAPHS\n\n");
+
+    printf("Mesh analysis - Linearly independent equations: \n\n");
+    printf("Meshes - Vertexes paths: \n");
+	while(node)
+    {
+
+        printf("%d: ", i);
+
+        loopList = getData(node);
+        node_t* loopNode = getTail(loopList);
+        edges_t* edge;
+        while(loopNode)
+        {
+            edge = getData(loopNode);
+            printf("%d-", edge->sourceVertex->ID);
+
+            loopNode = getPrevious(loopNode);
+        }
+        printf("%d\n", edge->destinyVertex->ID);
+
+        node = getNext(node);
+        i++;
+    }
 }
 
 int isEdgeUsed(edges_t* edge)
