@@ -2,8 +2,8 @@
 A basic electric circuit simulation program using graphs to apply Kirchhoff's network laws and compute voltage and current parameters.
 
 ## user interface
-The user must enter a graph following a text pattern in a .dot file. \n\r
-The file must be named "graph.dot" \n
+The user must enter a graph following a text pattern in a .dot file.
+The file must be named "graph.dot" 
 In the first line the user need to write "graph {", optional information as node shapes and orientation must be in this same line, after the "{".
 Afterwards, the user must write the conections, line by line, ending the line with a semicolon. Each vertex (source and destiny) must have an integer as ID, and be separed by two hyphens.
 Aiming to differentiate the components, the user must follow this pattern:
